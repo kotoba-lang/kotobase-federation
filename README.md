@@ -14,6 +14,6 @@ salted response. Consensus/ref publication and real transports remain injected
 capabilities rather than hidden storage assumptions.
 
 ```sh
-clojure -M:test
-clojure -M:lint
+kbb -M:test
+kbb -M:lint
 ```
