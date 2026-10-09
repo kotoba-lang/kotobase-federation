@@ -17,3 +17,20 @@ capabilities rather than hidden storage assumptions.
 kbb -M:test
 kbb -M:lint
 ```
+
+## Pure Kotoba: `kotobase.availability`
+
+[`src/kotobase/availability.kotoba`](src/kotobase/availability.kotoba) is the
+availability challenge for a guest (root ADR-2610082200 §16). The salted hash
+is `hash/sha256` (capability wire id 3) over `block ++ nonce`, so a guest using
+it declares `[:cap/call 3]`; the caller passes the block bytes it fetched
+instead of a get-fn. `verify` answers 1 ok, 2 failed, 3 missed, 4 malformed,
+5 verifier-lacks-replica, in the oracle's order. `kotobase.federation` stays as
+the oracle (`migration/availability-v1.edn`).
+
+```bash
+NODE_PATH=<node_modules with @noble/hashes> kbb --backend sci \
+  --classpath "src:$(kbb -Spath)" scripts/availability-oracle-cases.cljk
+```
+
+asks the oracle every question the Kotoba tests assert (13 cases, 2026-10-09).
